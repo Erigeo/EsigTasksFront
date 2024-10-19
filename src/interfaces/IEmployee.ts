@@ -1,14 +1,12 @@
 
-export enum Role {
-    Employee, Manager
-}
+
 
 export interface IEmployee {
-    id?: number,
-    fname: string,
-    lname: string,
+    id?: string,
+    firstName: string,
+    lastName: string,
     email: string,
     password: string,
-    role: Role
+    role: number
 
 }

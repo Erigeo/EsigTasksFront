@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 
 import HomeScreen from '@/views/HomeScreen.vue'
 import EmployeeView from '@/views/EmployeeView.vue'
+import ManagerView from '@/views/ManagerView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -13,6 +14,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/EmployeePage',
     name: 'EmployeePage',
     component: EmployeeView
+  },
+  {
+    path: '/ManagerPage',
+    name: 'ManagerPage',
+    component: ManagerView
   }
 ]
 
