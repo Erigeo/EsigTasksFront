@@ -1,0 +1,10 @@
+<template>
+    <div>
+        <button></button>
+        <button></button>
+        <div>
+            <input>
+        </div>
+    </div>
+    <h1>ABACAXI</h1>
+</template>
