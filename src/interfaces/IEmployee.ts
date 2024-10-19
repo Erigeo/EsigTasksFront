@@ -4,7 +4,7 @@ export enum Role {
 }
 
 export interface IEmployee {
-    id: number,
+    id?: number,
     fname: string,
     lname: string,
     email: string,
