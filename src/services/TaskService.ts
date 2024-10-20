@@ -56,6 +56,32 @@ export const getAllTasks = async (): Promise<ITask[] | null> => {
   };
 
 
+  export const deleteTask = async (id: number): Promise<boolean> => {
+    if (!token) {
+      console.error('Token não encontrado. Usuário não autenticado.');
+      return false; 
+    }
+  
+    try {
+      await Api.delete<ITask>(`task/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+          'Content-Type': 'application/json' 
+        },
+      });
+  
+      return true;
+  
+    } catch (error) {
+      
+        console.error('Erro ao excluir a tarefa:', error);
+      
+      return false; 
+    }
+  };
+  
+
+
   export const createTask = async (newTask: ITask): Promise<ITask | null> => {
 
     

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { ITask } from '@/interfaces/ITask';
-import { getAllTasks, getTaskById, createTask } from '@/services/TaskService';
+import { getAllTasks, getTaskById, createTask, deleteTask } from '@/services/TaskService';
 
 export const useTaskStore = defineStore('taskStore', () => {
   const tasks = ref<ITask[]>([]);
@@ -72,6 +72,36 @@ export const useTaskStore = defineStore('taskStore', () => {
     }
   };
 
+  const deleteTaskStore = async (id: number) => {
+    loading.value = true; // Supondo que você tenha uma variável `loading`
+    error.value = null; // Limpa qualquer erro anterior
+  
+    try {
+      const deletedTask: boolean = await deleteTask(id); // Chame a função e espere pelo resultado
+  
+      if (deletedTask) {
+        // Se a tarefa foi deletada com sucesso, remova-a da lista
+        
+      } else {
+        // Caso a tarefa não tenha sido deletada
+        error.value = 'Falha ao excluir a tarefa.';
+      }
+  
+    } catch (err) {
+      if (err instanceof Error) {
+        error.value = `Erro ao apagar task: ${err.message}`;
+      } else {
+        error.value = 'Erro desconhecido ao apagar task';
+      }
+      console.error(error.value, err);
+    } finally {
+      loading.value = false; // Finaliza o loading
+    }
+  };
+
+
+
+
   return {
     tasks,
     task,
@@ -80,5 +110,6 @@ export const useTaskStore = defineStore('taskStore', () => {
     fetchAllTasks,
     fetchTaskById,
     createNewTask,
+    deleteTaskStore
   };
 });

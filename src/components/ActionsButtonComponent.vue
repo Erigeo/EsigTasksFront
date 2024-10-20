@@ -144,13 +144,13 @@
             <button
               v-if="task.id !== undefined"
               @click="editTask(task.id!)"
-              class="text-gay-500 hover:text-blue-700"
+              class="text-gray-500 hover:text-blue-700"
             >
               Editar
             </button>
             <button
               v-if="task.id !== undefined"
-              @click="deleteTask(task.id!)"
+              @click="deleteTask(task.id)"
               class="text-red-500 hover:text-red-700 ml-2"
             >
               Excluir
@@ -315,9 +315,15 @@ const editTask = (id: number) => {
   // Lógica para editar a tarefa
 };
 
-const deleteTask = (id: number) => {
-  console.log("Excluindo tarefa com ID:", id);
-  // Lógica para excluir a tarefa
+const deleteTask = async (id: number) => {
+  try {
+    console.log("Excluindo tarefa com ID:", id);
+    await taskStore.deleteTaskStore(id); // Chama a função de exclusão do store
+    fetchTasks();
+    clearFilters(); // Limpa os filtros para garantir que a tabela mostre os dados atualizados
+  } catch (error) {
+    console.error("Erro ao excluir a tarefa:", error);
+  }
 };
 
 
