@@ -209,7 +209,7 @@
   {{ task.deadline ? formatDate(task.deadline) : 'N/A' }}
 </span>
 </td>
-          <td class="py-2 px-4 border-b">
+          <td class="py-2 px-4 border-b flex flex-row gap-3">
             <button
               v-if="task.id !== undefined"
               @click="deleteTask(task.id)"
@@ -217,17 +217,25 @@
             >
               Excluir
             </button>
+            <button
+      v-if="currentEditingTask !== null"
+      @click="saveEdit"
+      class="flex  justify-center items-center  font-bold shadow-lg"
+    >
+      <img src="../assets//edit-1479-svgrepo-com (2).svg"   class="w-[15px]" alt="">
+    </button>
+    <button
+      v-else :disabled="true"
+      
+      class="flex  justify-center items-center  font-bold shadow-lg"
+    >
+      <img src="../assets/edit-1479-svgrepo-com (3).svg"   class="w-[15px]" alt="">
+    </button>
           </td>
         </tr>
       </tbody>
     </table>
-    <button
-      v-if="currentEditingTask !== null"
-      @click="saveEdit"
-      class="flex w-[150px] justify-center items-center h-[40px] bg-yellow-500 rounded-md font-bold text-white shadow-lg"
-    >
-      Confirmar Edição
-    </button>
+   
   </div>
 </template>
 
