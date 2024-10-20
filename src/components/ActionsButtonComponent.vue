@@ -108,7 +108,8 @@
     </div>
   </div>
 
-  <div class="overflow-x-auto justify-center flex items-center mt-[50px]">
+  <div class="flex justify-center items-center">
+  <div class=" justify-center flex items-center mt-[50px] w-full max-w-[1200px] max-y-[1000px]">
     <table class="bg-white border border-gray-300">
       <thead>
         <tr class="bg-gray-200 text-gray-700">
@@ -131,26 +132,26 @@
           <td class="py-2 px-4 border-b">{{ task.id }}</td>
 
           <!-- Editar Título -->
-          <td class="py-2 px-4 border-b" @click="editField('title', task)">
+          <td class="max-w-[300px] w-[200px] overflow-hidden text-ellipsis whitespace-nowrap border-b" @click="editField('title', task)">
             <input
               v-if="isEditing.title && currentEditingTask === task.id"
               v-model="task.title"
               @blur="saveEdit"
-              class="border border-gray-300 p-1"
+              class="max-w-[110px] border border-gray-300 p-1"
             />
             <span v-else>{{ task.title }}</span>
           </td>
 
           <!-- Editar Descrição -->
           <td
-            class="py-2 px-4 border-b"
+            class="max-w-[200px] w-[250px] overflow-hidden text-ellipsis whitespace-nowrap border-b"
             @click="editField('description', task)"
           >
             <input
               v-if="isEditing.description && currentEditingTask === task.id"
               v-model="task.description"
               @blur="saveEdit"
-              class="border border-gray-300 p-1"
+               class="max-w-[100px] border border-gray-300 p-1"
             />
             <span v-else>{{ task.description }}</span>
           </td>
@@ -159,12 +160,12 @@
             {{ task.employee ? task.employee.firstName : "N/A" }}
           </td>
 
-          <td class="py-2 px-4 border-b" @click="editField('status', task)">
+          <td class="max-w-[300px] w-[120px] overflow-hidden text-ellipsis whitespace-nowrap border-b" @click="editField('status', task)">
             <select
               v-if="isEditing.status && currentEditingTask === task.id"
               v-model="task.status"
               @blur="saveEdit"
-              class="border border-gray-300 p-1"
+              class="max-w-[100px] border border-gray-300 p-1"
             >
               <option value="0">Pendente</option>
               <option value="1">Em Progresso</option>
@@ -178,12 +179,12 @@
             </span>
           </td>
 
-          <td class="py-2 px-4 border-b" @click="editField('priority', task)">
+          <td class="max-w-[325px] w-[100px] overflow-hidden text-ellipsis whitespace-nowrap border-b" @click="editField('priority', task)">
             <select
               v-if="isEditing.priority && currentEditingTask === task.id"
               v-model="task.priority"
               @blur="saveEdit"
-              class="border border-gray-300 p-1"
+              class="max-w-[90px] border border-gray-300 p-1"
             >
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>
@@ -197,13 +198,13 @@
             </span>
           </td>
 
-          <td class="py-2 px-4 border-b" @click="editField('deadline', task)">
+          <td class="max-w-[325px] w-[180px] overflow-hidden text-ellipsis whitespace-nowrap border-b" @click="editField('deadline', task)">
   <input
     v-if="isEditing.deadline && currentEditingTask === task.id"
     v-model="task.deadline"
     @blur="saveEdit"
     type="datetime-local"
-    class="border border-gray-300 p-1"
+    class="max-w-[175px] border border-gray-300 p-1"
   />
   <span v-else>
   {{ task.deadline ? formatDate(task.deadline) : 'N/A' }}
@@ -235,7 +236,7 @@
         </tr>
       </tbody>
     </table>
-   
+  </div>
   </div>
 </template>
 
