@@ -57,8 +57,9 @@ export const getAllTasks = async (): Promise<ITask[] | null> => {
 
 
   export const createTask = async (newTask: ITask): Promise<ITask | null> => {
+
     
-  
+      console.log(newTask)
     if (!token) {
       console.error('Token não encontrado. Usuário não autenticado.');
       return null; 

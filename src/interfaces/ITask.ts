@@ -6,12 +6,12 @@ export enum status {
 
 
 export interface ITask {
-    id: number,
+    id?: number,
     title: string,
     description: string,
     priority: string,
     status: status,
     deadline: string
     employeeId: number,
-    employee: IEmployee
+    employee?: IEmployee
 }

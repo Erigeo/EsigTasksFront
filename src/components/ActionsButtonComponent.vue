@@ -4,7 +4,7 @@
       class="flex w-[950px] h-[350px] flex-row justify-center items-center mt-[50px] bg-gray-200 rounded-xl shadow-md"
     >
       <img src="../assets/teste 1.svg" class="w-[300px] h-[200px]" />
-      <form >
+      <form>
         <div class="flex flex-row">
           <div class="flex-col flex m-5">
             <label class="flex items-start">ID</label>
@@ -14,10 +14,9 @@
             />
           </div>
           <div class="flex-col flex m-5 w-[300px]">
-            <label class="flex items-start">Title/Description</label>
+            <label class="flex items-start">Title</label>
             <input
               v-model="titleInput"
-              
               class="border-b-[1px] border-black bg-transparent outline-none"
             />
           </div>
@@ -25,8 +24,9 @@
 
         <div class="flex flex-row">
           <div class="flex-col flex m-5">
-            <label  class="flex items-start">Date</label>
-            <input placeholder="dd-mm-aaaa hh:mm"
+            <label class="flex items-start">Date</label>
+            <input
+              placeholder="dd-mm-aaaa hh:mm"
               v-model="dateInput"
               class="border-b-[1px] border-black bg-transparent outline-none"
             />
@@ -35,7 +35,6 @@
             <label class="flex items-start">Description</label>
             <input
               v-model="descriptionInput"
-              
               class="border-b-[1px] border-black bg-transparent outline-none"
             />
           </div>
@@ -48,7 +47,6 @@
               v-model="selectedProgress"
               class="border-b-[1px] border-black bg-transparent outline-none"
             >
-              
               <option value="0">Pendente</option>
               <option value="1">Em Progresso</option>
               <option value="2">Concluido</option>
@@ -61,7 +59,6 @@
               v-model="selectedPriority"
               class="border-b-[1px] border-black bg-transparent outline-none"
             >
-              
               <option value="High">High</option>
               <option value="Medium">Medium</option>
               <option value="Low">Low</option>
@@ -106,15 +103,10 @@
           >
             Clean filters
           </button>
-
-          
         </div>
       </form>
     </div>
   </div>
-
-
-
 
   <div class="overflow-x-auto justify-center flex items-center mt-[50px]">
     <table class="bg-white border border-gray-300">
@@ -130,11 +122,17 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="task in filteredTasks" :key="task.id" class="hover:bg-gray-100">
+        <tr
+          v-for="task in filteredTasks"
+          :key="task.id"
+          class="hover:bg-gray-100"
+        >
           <td class="py-2 px-4 border-b">{{ task.id }}</td>
           <td class="py-2 px-4 border-b">{{ task.title }}</td>
           <td class="py-2 px-4 border-b">{{ task.description }}</td>
-          <td class="py-2 px-4 border-b">{{ task.employee ? task.employee.firstName : "N/A" }}</td>
+          <td class="py-2 px-4 border-b">
+            {{ task.employee ? task.employee.firstName : "N/A" }}
+          </td>
           <td class="py-2 px-4 border-b">
             <template v-if="task.status === 1"> Em progresso </template>
             <template v-else-if="task.status === 2"> Concluído </template>
@@ -143,9 +141,20 @@
           </td>
           <td class="py-2 px-4 border-b">{{ formatDate(task.deadline) }}</td>
           <td class="py-2 px-4 border-b">
-            <button @click="editTask(task.id)" class="text-gay-500 hover:text-blue-700">Editar</button>
-            <button @click="deleteTask(task.id)" class="text-red-500 hover:text-red-700 ml-2">Excluir</button>
-            <button @click="exibirTask(task.id)" class="text-blue-500 hover:text-green-700 ml-2">Exibir</button>
+            <button
+              v-if="task.id !== undefined"
+              @click="editTask(task.id!)"
+              class="text-gay-500 hover:text-blue-700"
+            >
+              Editar
+            </button>
+            <button
+              v-if="task.id !== undefined"
+              @click="deleteTask(task.id!)"
+              class="text-red-500 hover:text-red-700 ml-2"
+            >
+              Excluir
+            </button>
           </td>
         </tr>
       </tbody>
@@ -163,7 +172,6 @@ import { IEmployee } from "@/interfaces/IEmployee";
 
 const employeeStore = useEmployeeStore();
 
-
 // Usando o store para gerenciar tarefas
 const taskStore = useTaskStore();
 const tasks = ref<ITask[]>([]); // Estado para as tarefas
@@ -175,13 +183,12 @@ const titleInput = ref("");
 const idInput = ref("");
 const dateInput = ref("");
 const descriptionInput = ref("");
-const selectedPriority= ref("");
-
+const selectedPriority = ref("");
 
 const filteredTasks = ref<ITask[]>([]);
 
 const fetchTasks = async () => {
-  await taskStore.fetchAllTasks(); 
+  await taskStore.fetchAllTasks();
   tasks.value = taskStore.tasks;
   filteredTasks.value = tasks.value; // Adicione esta linha
   console.log("Tarefas:", tasks.value);
@@ -204,8 +211,12 @@ const formatDate = (dateString: string): string | null => {
 };
 const filterTasks = () => {
   filteredTasks.value = tasks.value.filter((task) => {
-    const matchesId = idInput.value ? task.id.toString() === idInput.value : true;
-    const matchesTitle = titleInput.value ? task.title.includes(titleInput.value) : true;
+    const matchesId = idInput.value
+      ? task.id?.toString() === idInput.value
+      : true;
+    const matchesTitle = titleInput.value
+      ? task.title.includes(titleInput.value)
+      : true;
     const matchesProgress = selectedProgress.value
       ? (selectedProgress.value === "0" && task.status === 0) ||
         (selectedProgress.value === "1" && task.status === 1) ||
@@ -216,14 +227,32 @@ const filterTasks = () => {
       : true;
 
     // Filtragem de data com verificação de formato
-    const formattedDateInput = dateInput.value ? formatDate(dateInput.value) : null;
-    const formattedTaskDeadline = task.deadline ? formatDate(task.deadline) : null;
-    const matchesDate = formattedDateInput ? formattedTaskDeadline === formattedDateInput : true;
+    const formattedDateInput = dateInput.value
+      ? formatDate(dateInput.value)
+      : null;
+    const formattedTaskDeadline = task.deadline
+      ? formatDate(task.deadline)
+      : null;
+    const matchesDate = formattedDateInput
+      ? formattedTaskDeadline === formattedDateInput
+      : true;
 
-    const matchesDescription = descriptionInput.value ? task.description.includes(descriptionInput.value) : true;
-    const matchesPriority = selectedPriority.value ? task.priority === selectedPriority.value : true;
+    const matchesDescription = descriptionInput.value
+      ? task.description.includes(descriptionInput.value)
+      : true;
+    const matchesPriority = selectedPriority.value
+      ? task.priority === selectedPriority.value
+      : true;
 
-    return matchesId && matchesTitle && matchesProgress && matchesEmployee && matchesDate && matchesDescription && matchesPriority;
+    return (
+      matchesId &&
+      matchesTitle &&
+      matchesProgress &&
+      matchesEmployee &&
+      matchesDate &&
+      matchesDescription &&
+      matchesPriority
+    );
   });
 };
 
@@ -236,13 +265,50 @@ const clearFilters = () => {
   dateInput.value = "";
   descriptionInput.value = "";
   selectedPriority.value = "";
-  
 };
 
-const createTask = () => {
+
+
+const createTask = async () => {
   console.log("Criar nova tarefa");
-  // Lógica para criar nova tarefa
+
+  const selectedEmployee = employees.value.find(
+    (employee) => employee.id === selectedOption.value
+  );
+
+  if (!selectedEmployee || !selectedEmployee.id) {
+    console.error("Funcionário não encontrado ou ID inválido");
+    console.log(selectedEmployee);
+    return;
+  }
+
+  const employeeId = Number(selectedEmployee.id);
+  console.log("Valor de dateInput:", dateInput.value);
+
+  // Expecting format to be "YYYY-MM-DD HH:mm"
+  const dateValue = new Date(dateInput.value);
+  
+  // Validate the date
+  if (isNaN(dateValue.getTime())) {
+    console.error("Data inválida:", dateInput.value);
+    return; // Exit if date is invalid
+  }
+
+  const deadlineFormatted = dateValue.toISOString();
+
+  const newTask: ITask = {
+    title: titleInput.value,
+    description: descriptionInput.value,
+    status: Number(selectedProgress.value),
+    deadline: deadlineFormatted,
+    employeeId: employeeId,
+    priority: selectedPriority.value,
+  };
+
+  await taskStore.createNewTask(newTask);
+  clearFilters();
 };
+
 
 const editTask = (id: number) => {
   console.log("Editando tarefa com ID:", id);
@@ -253,16 +319,11 @@ const deleteTask = (id: number) => {
   console.log("Excluindo tarefa com ID:", id);
   // Lógica para excluir a tarefa
 };
-const exibirTask = (id: number) => {
-  console.log("Excluindo tarefa com ID:", id);
-  // Lógica para excluir a tarefa
-};
+
 
 // Carregar tarefas ao montar o componente
 onMounted(() => {
   fetchTasks();
   fetchEmployees();
-  
-
 });
 </script>

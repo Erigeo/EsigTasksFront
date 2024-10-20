@@ -54,7 +54,7 @@ export const useTaskStore = defineStore('taskStore', () => {
   const createNewTask = async (newTask: ITask) => {
     loading.value = true;
     error.value = null;
-
+    console.log("entrei no store")
     try {
       const createdTask = await createTask(newTask);
       if (createdTask) {
