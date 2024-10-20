@@ -152,7 +152,7 @@ export default {
     const password = ref("");
     const fname = ref("");
     const lname = ref("");
-    const errorMessage = ref<string | null>(null); // Define a variável errorMessage
+    const errorMessage = ref<string | null>(null); 
 
     const selectedOption = ref<number>(0);
     const showSignUp = ref(false);
@@ -168,18 +168,18 @@ export default {
 
 
     const handleLogin = async () => {
-      errorMessage.value = null; // Limpa mensagens de erro anteriores
+      errorMessage.value = null; 
 
       try {
         await authStore.login(email.value, password.value);
 
         if (authStore.tokenResponse?.role == "Employee") {
             
-          router.push("/EmployeePage"); // Altere para a rota desejada
+          router.push("/EmployeePage"); 
         } 
         else if (authStore.tokenResponse?.role == "Manager") {
             
-            router.push("/ManagerPage"); // Altere para a rota desejada
+            router.push("/ManagerPage"); 
           } 
         else {
           errorMessage.value = "Login falhou. Por favor, tente novamente.";
@@ -191,16 +191,21 @@ export default {
 
 
     const handleRegister = async () => {
-      errorMessage.value = null; // Limpa mensagens de erro anteriores
+      errorMessage.value = null; 
 
       try {
         console.log(employee)
         await authStore.register(employee.value);
         await authStore.login(employee.value.email, employee.value.password);
-
-        if (authStore.token) {
-          router.push("/EmployeePage"); // Altere para a rota desejada
-        } else {
+        
+        if (authStore.token && employee.value.role == 1) {
+          router.push("/EmployeePage"); 
+        } 
+        else if (authStore.token && employee.value.role == 0) {
+          router.push("/ManagerPage"); 
+        }
+        
+        else {
           errorMessage.value = "Login falhou. Por favor, tente novamente.";
         }
       } catch (error) {
@@ -211,7 +216,7 @@ export default {
     return {
       email,
       password,
-      errorMessage, // Retorna a variável errorMessage
+      errorMessage, 
       handleLogin,
       showSignUp,
       selectedOption,

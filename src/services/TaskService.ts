@@ -115,10 +115,9 @@ export const getAllTasks = async (): Promise<ITask[] | null> => {
     if (!token) {
       console.error('Token não encontrado. Usuário não autenticado.'); 
     }
-  
     try {
-      "chegando ein"
       console.log(task)
+      console.log("oiiiii ", task.employeeId)
        await Api.put<ITask>(`task/${task.id}`, task, {
         headers: {
           Authorization: `Bearer ${token}`, 
