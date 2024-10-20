@@ -11,7 +11,7 @@ export interface ITask {
     description: string,
     priority: string,
     status: number,
-    deadline: string
+    deadline: string | null;
     employeeId: number,
     employee?: IEmployee
 }

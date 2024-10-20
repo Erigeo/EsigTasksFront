@@ -197,7 +197,18 @@
             </span>
           </td>
 
-          <td class="py-2 px-4 border-b">{{ formatDate(task.deadline) }}</td>
+          <td class="py-2 px-4 border-b" @click="editField('deadline', task)">
+  <input
+    v-if="isEditing.deadline && currentEditingTask === task.id"
+    v-model="task.deadline"
+    @blur="saveEdit"
+    type="datetime-local"
+    class="border border-gray-300 p-1"
+  />
+  <span v-else>
+  {{ task.deadline ? formatDate(task.deadline) : 'N/A' }}
+</span>
+</td>
           <td class="py-2 px-4 border-b">
             <button
               v-if="task.id !== undefined"
@@ -249,7 +260,8 @@ const isEditing = ref({
   title: false,
   description: false,
   status: false,
-  priority: false
+  priority: false,
+  deadline: false
 });
 
 const currentEditingTask = ref<number | null>(null);
@@ -267,15 +279,19 @@ const fetchEmployees = async () => {
   console.log(employees.value);
 };
 
-const formatDate = (dateString: string): string | null => {
-  const date = new Date(dateString);
-  // Verifica se a data é válida
-  if (isNaN(date.getTime())) {
-    console.error(`Invalid date value: ${dateString}`);
-    return null; // Retorna null para valores de data inválidos
-  }
-  return format(date, "dd-MM-yyyy HH:mm");
-};
+
+
+ 
+
+  const formatDate = (dateString: string): string | null => {
+    const date = new Date(dateString);
+    // Verifica se a data é válida
+    if (isNaN(date.getTime())) {
+      console.error(`Invalid date value: ${dateString}`);
+      return null; // Retorna null para valores de data inválidos
+    }
+    return format(date, "dd-MM-yyyy HH:mm");
+  };
 const filterTasks = () => {
   filteredTasks.value = tasks.value.filter((task) => {
     const matchesId = idInput.value
@@ -385,7 +401,7 @@ const deleteTask = async (id: number) => {
   }
 };
 
-const editField = (field: 'title' | 'description' | 'status' | 'priority', task: ITask) => {
+const editField = (field: 'title' | 'description' | 'status' | 'priority' | 'deadline', task: ITask) => {
   if (task.id !== undefined) {
     currentEditingTask.value = task.id; // Defina a tarefa atual sendo editada
     isEditing.value[field] = true; // Atualiza o campo sendo editado
@@ -398,22 +414,25 @@ const saveEdit = async () => {
     const taskToUpdate = tasks.value.find(task => task.id === taskId);
 
     if (taskToUpdate) {
-      // Garantir que o status seja um número
-      taskToUpdate.status = Number(taskToUpdate.status);
+      // Verifique se o deadline está definido e é uma string
+      if (taskToUpdate.deadline === undefined || taskToUpdate.deadline === null) {
+  console.error("Deadline está indefinido ou nulo:", taskToUpdate);
+} 
 
-      await taskStore.updateTaskStore(taskToUpdate); // Atualiza a tarefa
+      await taskStore.updateTaskStore(taskToUpdate); // Atualiza a tarefa no store
       console.log(`Task ${taskId} updated successfully`);
     } else {
       console.error(`Task with ID ${taskId} not found`);
     }
 
     // Resetar o estado de edição
-    isEditing.value = { title: false, description: false, status: false, priority: false};
+    isEditing.value = { title: false, description: false, status: false, deadline: false, priority: false };
     currentEditingTask.value = null;
   } else {
     console.error("No current editing task");
   }
 };
+
 
 
 // Carregar tarefas ao montar o componente
