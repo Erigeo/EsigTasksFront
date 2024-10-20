@@ -3,11 +3,15 @@ import { jwtDecode } from 'jwt-decode';
 
 
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import { login as loginService, register as registerService } from '../services/AuthService';
 import { IEmployee } from '../interfaces/IEmployee';
 import { ILoginResponse } from '../interfaces/ILoginResponse';
 import { ITokenResponse } from '@/interfaces/ITokenResponse';
+
+
+
+
 
 
 export const useAuthStore = defineStore('auth', () => {
@@ -16,6 +20,22 @@ export const useAuthStore = defineStore('auth', () => {
     const errorMessage = ref<string | null>(null);
     const tokenResponse = ref<ITokenResponse | null>(null);
 
+
+
+    onMounted(() => {
+        const storedToken = localStorage.getItem('token');
+        if (storedToken) {
+            token.value = storedToken;
+            const decodedToken = jwtDecode(storedToken) as { sub: string; id: string; role: string };
+            tokenResponse.value = {
+                email: decodedToken.sub,
+                id: decodedToken.id,
+                role: decodedToken.role,
+            };
+        }
+    });
+
+
     const login = async (email: string, password: string) => {
         try {
             const response: ILoginResponse = await loginService(email, password);
@@ -23,6 +43,7 @@ export const useAuthStore = defineStore('auth', () => {
             errorMessage.value = null;
 
             if (token.value) {
+                localStorage.setItem('token', token.value);
                 const decodedToken = jwtDecode(token.value) as { sub: string; id: string; role: string };
                 
                 tokenResponse.value = {
@@ -66,6 +87,7 @@ export const useAuthStore = defineStore('auth', () => {
     const logout = () => {
         user.value = null;
         token.value = null;
+        localStorage.removeItem('token'); // Limpa o token do localStorage
     };
 
     return {

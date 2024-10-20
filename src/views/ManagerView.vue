@@ -2,8 +2,8 @@
 import ActionsButtonComponent from '@/components/ActionsButtonComponent.vue';
 </script>
 
-<template>
-    <div>
+<template >
+    <div class="">
         <ActionsButtonComponent/>
     </div>
 </template>

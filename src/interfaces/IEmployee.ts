@@ -1,3 +1,4 @@
+import { ITask } from "./ITask";
 
 
 
@@ -7,6 +8,7 @@ export interface IEmployee {
     lastName: string,
     email: string,
     password: string,
-    role: number
+    role: number,
+    tasks?: ITask[];
 
 }

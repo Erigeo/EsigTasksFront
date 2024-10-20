@@ -1,3 +1,5 @@
+import { IEmployee } from "./IEmployee"
+
 export enum status {
     Completed, InProgress, Pending
 }
@@ -9,5 +11,7 @@ export interface ITask {
     description: string,
     priority: string,
     status: status,
-    deadline: Date
+    deadline: string
+    employeeId: number,
+    employee: IEmployee
 }
