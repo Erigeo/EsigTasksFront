@@ -117,6 +117,7 @@
           <th class="py-2 px-4 border-b">Descrição</th>
           <th class="py-2 px-4 border-b">Responsável</th>
           <th class="py-2 px-4 border-b">Status</th>
+          <th class="py-2 px-4 border-b">Priority</th>
           <th class="py-2 px-4 border-b">Deadline</th>
           <th class="py-2 px-4 border-b">Ação</th>
         </tr>
@@ -177,6 +178,25 @@
             </span>
           </td>
 
+          <td class="py-2 px-4 border-b" @click="editField('priority', task)">
+            <select
+              v-if="isEditing.priority && currentEditingTask === task.id"
+              v-model="task.priority"
+              @blur="saveEdit"
+              class="border border-gray-300 p-1"
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+            <span v-else>
+              <template v-if="task.priority === 'Medium' ">Medium</template>
+              <template v-else-if="task.priority === 'High' ">High</template>
+              <template v-else-if="task.priority=== 'Low'">Low</template>
+              <template v-else>Status desconhecido</template>
+            </span>
+          </td>
+
           <td class="py-2 px-4 border-b">{{ formatDate(task.deadline) }}</td>
           <td class="py-2 px-4 border-b">
             <button
@@ -228,7 +248,8 @@ const filteredTasks = ref<ITask[]>([]);
 const isEditing = ref({
   title: false,
   description: false,
-  status: false
+  status: false,
+  priority: false
 });
 
 const currentEditingTask = ref<number | null>(null);
@@ -364,7 +385,7 @@ const deleteTask = async (id: number) => {
   }
 };
 
-const editField = (field: 'title' | 'description' | 'status', task: ITask) => {
+const editField = (field: 'title' | 'description' | 'status' | 'priority', task: ITask) => {
   if (task.id !== undefined) {
     currentEditingTask.value = task.id; // Defina a tarefa atual sendo editada
     isEditing.value[field] = true; // Atualiza o campo sendo editado
