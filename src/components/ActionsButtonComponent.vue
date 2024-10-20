@@ -188,7 +188,6 @@
               </select>
 
               <template   v-else>
-                
                   {{ task.employee?.firstName }}
                 </template>
                 
@@ -481,6 +480,12 @@ const saveEdit = async () => {
         taskToUpdate.deadline === null
       ) {
         console.error("Deadline está indefinido ou nulo:", taskToUpdate);
+      }
+      if (
+        taskToUpdate.employeeId === undefined ||
+        taskToUpdate.employeeId === null
+      ) {
+        console.error("Employee ID está indefinido ou nulo:", taskToUpdate)
       }
       taskToUpdate.status = Number(taskToUpdate.status);
       

@@ -117,7 +117,7 @@ export const getAllTasks = async (): Promise<ITask[] | null> => {
     }
     try {
       console.log(task)
-      console.log("oiiiii ", task.employeeId)
+      console.log("employee id ", task.employeeId)
        await Api.put<ITask>(`task/${task.id}`, task, {
         headers: {
           Authorization: `Bearer ${token}`, 
