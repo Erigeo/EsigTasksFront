@@ -408,7 +408,7 @@ const saveEdit = async () => {
     }
 
     // Resetar o estado de edição
-    isEditing.value = { title: false, description: false, status: false };
+    isEditing.value = { title: false, description: false, status: false, priority: false};
     currentEditingTask.value = null;
   } else {
     console.error("No current editing task");
