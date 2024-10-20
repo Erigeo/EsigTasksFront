@@ -175,7 +175,7 @@
               <template v-if="task.status === 1">Em progresso</template>
               <template v-else-if="task.status === 2">Concluído</template>
               <template v-else-if="task.status === 0">Pendente</template>
-              <template v-else>Status desconhecido</template>
+              
             </span>
           </td>
 
@@ -395,6 +395,7 @@ const createTask = async () => {
   };
 
   await taskStore.createNewTask(newTask);
+  fetchTasks();
   clearFilters();
 };
 
@@ -436,6 +437,7 @@ const saveEdit = async () => {
     
     isEditing.value = { title: false, description: false, status: false, deadline: false, priority: false };
     currentEditingTask.value = null;
+    fetchTasks();
   } else {
     console.error("No current editing task");
   }
