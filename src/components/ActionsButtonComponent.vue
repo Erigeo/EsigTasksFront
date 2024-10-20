@@ -233,7 +233,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useTaskStore } from "@/stores/taskStore"; // Importando o store para tasks
+import { useTaskStore } from "@/stores/taskStore"; 
 import { ITask } from "@/interfaces/ITask";
 import { format } from "date-fns";
 import { useEmployeeStore } from "@/stores/employeeStore";
@@ -241,9 +241,9 @@ import { IEmployee } from "@/interfaces/IEmployee";
 
 const employeeStore = useEmployeeStore();
 
-// Usando o store para gerenciar tarefas
+
 const taskStore = useTaskStore();
-const tasks = ref<ITask[]>([]); // Estado para as tarefas
+const tasks = ref<ITask[]>([]); 
 const employees = ref<IEmployee[]>([]);
 
 const selectedOption = ref("");
@@ -269,7 +269,7 @@ const currentEditingTask = ref<number | null>(null);
 const fetchTasks = async () => {
   await taskStore.fetchAllTasks();
   tasks.value = taskStore.tasks;
-  filteredTasks.value = tasks.value; // Adicione esta linha
+  filteredTasks.value = tasks.value; 
   console.log("Tarefas:", tasks.value);
 };
 
@@ -285,10 +285,10 @@ const fetchEmployees = async () => {
 
   const formatDate = (dateString: string): string | null => {
     const date = new Date(dateString);
-    // Verifica se a data é válida
+    
     if (isNaN(date.getTime())) {
       console.error(`Invalid date value: ${dateString}`);
-      return null; // Retorna null para valores de data inválidos
+      return null; 
     }
     return format(date, "dd-MM-yyyy HH:mm");
   };
@@ -309,7 +309,7 @@ const filterTasks = () => {
       ? task.employee && task.employee.id === selectedOption.value
       : true;
 
-    // Filtragem de data com verificação de formato
+   
     const formattedDateInput = dateInput.value
       ? formatDate(dateInput.value)
       : null;
@@ -340,7 +340,6 @@ const filterTasks = () => {
 };
 
 const clearFilters = () => {
-  // Limpa os valores dos campos de entrada
   idInput.value = "";
   titleInput.value = "";
   selectedProgress.value = "";
@@ -366,13 +365,13 @@ const createTask = async () => {
   const employeeId = Number(selectedEmployee.id);
   console.log("Valor de dateInput:", dateInput.value);
 
-  // Expecting format to be "YYYY-MM-DD HH:mm"
+  
   const dateValue = new Date(dateInput.value);
 
-  // Validate the date
+
   if (isNaN(dateValue.getTime())) {
     console.error("Data inválida:", dateInput.value);
-    return; // Exit if date is invalid
+    return; 
   }
 
   const deadlineFormatted = dateValue.toISOString();
@@ -393,9 +392,9 @@ const createTask = async () => {
 const deleteTask = async (id: number) => {
   try {
     console.log("Excluindo tarefa com ID:", id);
-    await taskStore.deleteTaskStore(id); // Chama a função de exclusão do store
+    await taskStore.deleteTaskStore(id); 
     fetchTasks();
-    clearFilters(); // Limpa os filtros para garantir que a tabela mostre os dados atualizados
+    clearFilters(); 
   } catch (error) {
     console.error("Erro ao excluir a tarefa:", error);
   }
@@ -403,8 +402,8 @@ const deleteTask = async (id: number) => {
 
 const editField = (field: 'title' | 'description' | 'status' | 'priority' | 'deadline', task: ITask) => {
   if (task.id !== undefined) {
-    currentEditingTask.value = task.id; // Defina a tarefa atual sendo editada
-    isEditing.value[field] = true; // Atualiza o campo sendo editado
+    currentEditingTask.value = task.id; 
+    isEditing.value[field] = true; 
   }
 };
 
@@ -414,18 +413,18 @@ const saveEdit = async () => {
     const taskToUpdate = tasks.value.find(task => task.id === taskId);
 
     if (taskToUpdate) {
-      // Verifique se o deadline está definido e é uma string
+     
       if (taskToUpdate.deadline === undefined || taskToUpdate.deadline === null) {
   console.error("Deadline está indefinido ou nulo:", taskToUpdate);
 } 
 
-      await taskStore.updateTaskStore(taskToUpdate); // Atualiza a tarefa no store
+      await taskStore.updateTaskStore(taskToUpdate); 
       console.log(`Task ${taskId} updated successfully`);
     } else {
       console.error(`Task with ID ${taskId} not found`);
     }
 
-    // Resetar o estado de edição
+    
     isEditing.value = { title: false, description: false, status: false, deadline: false, priority: false };
     currentEditingTask.value = null;
   } else {
@@ -435,7 +434,7 @@ const saveEdit = async () => {
 
 
 
-// Carregar tarefas ao montar o componente
+
 onMounted(() => {
   fetchTasks();
   fetchEmployees();
