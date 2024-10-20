@@ -108,3 +108,27 @@ export const getAllTasks = async (): Promise<ITask[] | null> => {
       return null; 
     }
   };
+
+ 
+
+  export const updateTask = async (task: ITask): Promise<void> => {
+    if (!token) {
+      console.error('Token não encontrado. Usuário não autenticado.'); 
+    }
+  
+    try {
+      console.log(task)
+      const response = await Api.put<ITask>(`task/${task.id}`, task, {
+        headers: {
+          Authorization: `Bearer ${token}`, 
+          'Content-Type': 'application/json' 
+        },
+      });
+  
+  
+    } catch (error) {
+      
+        console.error('Erro ao editar a tarefa:', error);
+      
+    }
+  };

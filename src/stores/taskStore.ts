@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import { ITask } from '@/interfaces/ITask';
-import { getAllTasks, getTaskById, createTask, deleteTask } from '@/services/TaskService';
+import { getAllTasks, getTaskById, createTask, deleteTask, updateTask } from '@/services/TaskService';
 
 export const useTaskStore = defineStore('taskStore', () => {
   const tasks = ref<ITask[]>([]);
@@ -44,6 +44,28 @@ export const useTaskStore = defineStore('taskStore', () => {
         error.value = `Erro ao buscar task com ID ${id}: ${err.message}`;
       } else {
         error.value = 'Erro desconhecido ao buscar task';
+      }
+      console.error(error.value, err);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  const updateTaskStore = async (updatedTask: ITask) => {
+    loading.value = true;
+    error.value = null;
+  
+    try {
+      await updateTask( updatedTask); // Chama a função de serviço com o id e o objeto
+      const taskIndex = tasks.value.findIndex(task => task.id === updatedTask.id);
+      if (taskIndex !== -1) {
+        tasks.value[taskIndex] = updatedTask; // Atualiza a tarefa na lista local
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        error.value = `Erro ao atualizar a task: ${err.message}`;
+      } else {
+        error.value = 'Erro desconhecido ao atualizar a task';
       }
       console.error(error.value, err);
     } finally {
@@ -102,6 +124,8 @@ export const useTaskStore = defineStore('taskStore', () => {
 
 
 
+
+
   return {
     tasks,
     task,
@@ -110,6 +134,7 @@ export const useTaskStore = defineStore('taskStore', () => {
     fetchAllTasks,
     fetchTaskById,
     createNewTask,
-    deleteTaskStore
+    deleteTaskStore,
+    updateTaskStore
   };
 });
