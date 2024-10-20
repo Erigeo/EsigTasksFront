@@ -81,6 +81,7 @@ export const useTaskStore = defineStore('taskStore', () => {
       const createdTask = await createTask(newTask);
       if (createdTask) {
         tasks.value.push(createdTask);
+        fetchAllTasks();
       }
     } catch (err) {
       if (err instanceof Error) {
