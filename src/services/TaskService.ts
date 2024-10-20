@@ -117,8 +117,9 @@ export const getAllTasks = async (): Promise<ITask[] | null> => {
     }
   
     try {
+      "chegando ein"
       console.log(task)
-      const response = await Api.put<ITask>(`task/${task.id}`, task, {
+       await Api.put<ITask>(`task/${task.id}`, task, {
         headers: {
           Authorization: `Bearer ${token}`, 
           'Content-Type': 'application/json' 

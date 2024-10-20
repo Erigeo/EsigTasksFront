@@ -154,7 +154,7 @@ export default {
     const lname = ref("");
     const errorMessage = ref<string | null>(null); // Define a variável errorMessage
 
-    const selectedOption = ref<number>(1);
+    const selectedOption = ref<number>(0);
     const showSignUp = ref(false);
     
     const employee = ref<IEmployee>({

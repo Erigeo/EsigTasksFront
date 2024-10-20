@@ -10,7 +10,7 @@ export interface ITask {
     title: string,
     description: string,
     priority: string,
-    status: status,
+    status: number,
     deadline: string
     employeeId: number,
     employee?: IEmployee
