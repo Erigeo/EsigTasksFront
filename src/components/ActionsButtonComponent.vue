@@ -109,140 +109,190 @@
   </div>
 
   <div class="flex justify-center items-center">
-  <div class=" justify-center flex items-center mt-[50px] w-full max-w-[1200px] max-y-[1000px]">
-    <table class="bg-white border border-gray-300">
-      <thead>
-        <tr class="bg-gray-200 text-gray-700">
-          <th class="py-2 px-4 border-b">ID</th>
-          <th class="py-2 px-4 border-b">Título</th>
-          <th class="py-2 px-4 border-b">Descrição</th>
-          <th class="py-2 px-4 border-b">Responsável</th>
-          <th class="py-2 px-4 border-b">Status</th>
-          <th class="py-2 px-4 border-b">Priority</th>
-          <th class="py-2 px-4 border-b">Deadline</th>
-          <th class="py-2 px-4 border-b">Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="task in filteredTasks"
-          :key="task.id"
-          class="hover:bg-gray-100"
-        >
-          <td class="py-2 px-4 border-b">{{ task.id }}</td>
-
-          <!-- Editar Título -->
-          <td class="max-w-[300px] w-[200px] overflow-hidden text-ellipsis whitespace-nowrap border-b" @click="editField('title', task)">
-            <input
-              v-if="isEditing.title && currentEditingTask === task.id"
-              v-model="task.title"
-              @blur="saveEdit"
-              class="max-w-[110px] border border-gray-300 p-1"
-            />
-            <span v-else>{{ task.title }}</span>
-          </td>
-
-          <!-- Editar Descrição -->
-          <td
-            class="max-w-[200px] w-[250px] overflow-hidden text-ellipsis whitespace-nowrap border-b"
-            @click="editField('description', task)"
+    <div
+      class="justify-center flex items-center mt-[50px] w-full max-w-[1200px] max-y-[1000px]"
+    >
+      <table class="bg-white border border-gray-300">
+        <thead>
+          <tr class="bg-gray-200 text-gray-700">
+            <th class="py-2 px-4 border-b">ID</th>
+            <th class="py-2 px-4 border-b">Título</th>
+            <th class="py-2 px-4 border-b">Descrição</th>
+            <th class="py-2 px-4 border-b">Responsável</th>
+            <th class="py-2 px-4 border-b">Status</th>
+            <th class="py-2 px-4 border-b">Priority</th>
+            <th class="py-2 px-4 border-b">Deadline</th>
+            <th class="py-2 px-4 border-b">Ação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="task in filteredTasks"
+            :key="task.id"
+            class="hover:bg-gray-100"
           >
-            <input
-              v-if="isEditing.description && currentEditingTask === task.id"
-              v-model="task.description"
-              @blur="saveEdit"
-               class="max-w-[100px] border border-gray-300 p-1"
-            />
-            <span v-else>{{ task.description }}</span>
-          </td>
+            <td class="py-2 px-4 border-b">{{ task.id }}</td>
 
-          <td class="py-2 px-4 border-b">
-            {{ task.employee ? task.employee.firstName : "N/A" }}
-          </td>
-
-          <td class="max-w-[300px] w-[120px] overflow-hidden text-ellipsis whitespace-nowrap border-b" @click="editField('status', task)">
-            <select
-              v-if="isEditing.status && currentEditingTask === task.id"
-              v-model="task.status"
-              @blur="saveEdit"
-              class="max-w-[100px] border border-gray-300 p-1"
+            <!-- Editar Título -->
+            <td
+              class="max-w-[300px] w-[200px] overflow-hidden text-ellipsis whitespace-nowrap border-b"
+              @click="editField('title', task)"
             >
-              <option value="0">Pendente</option>
-              <option value="1">Em Progresso</option>
-              <option value="2">Concluído</option>
-            </select>
-            <span v-else>
-              <template v-if="task.status === 1">Em progresso</template>
-              <template v-else-if="task.status === 2">Concluído</template>
-              <template v-else-if="task.status === 0">Pendente</template>
+              <input
+                v-if="isEditing.title && currentEditingTask === task.id"
+                v-model="task.title"
+                
+                class="max-w-[110px] border border-gray-300 p-1"
+              />
+              <span v-else>{{ task.title }}</span>
+            </td>
+
+            <!-- Editar Descrição -->
+            <td
+              class="max-w-[200px] w-[250px] overflow-hidden text-ellipsis whitespace-nowrap border-b"
+              @click="editField('description', task)"
+            >
+              <input
+                v-if="isEditing.description && currentEditingTask === task.id"
+                v-model="task.description"
+                
+                class="max-w-[100px] border border-gray-300 p-1"
+              />
+              <span v-else>{{ task.description }}</span>
+            </td>
+
+            <td
+              class="max-w-[325px] w-[100px] overflow-hidden text-ellipsis whitespace-nowrap border-b"
+              @click="editField('employeeId', task)"
+            >
+              <select
+                v-if="isEditing.employeeId && currentEditingTask === task.id"
+                v-model="task.employeeId"
+                class="max-w-[90px] border border-gray-300 p-1"
+              >
+                <!-- Supondo que `task.employees` é uma lista de objetos de funcionários -->
+                <option :value="task.employeeId">
+                  {{
+                    task.employee?.firstName 
+                  }}
+                </option>
+
+                <option
+                  v-for="employee in employees"
+                  :key="employee.id"
+                  :value="employee.id"
+                >
+                  {{ employee.firstName }}
+                </option>
+              </select>
+
+              <template   v-else>
+                
+                  {{ task.employee?.firstName }}
+                </template>
+                
               
-            </span>
-          </td>
+            </td>
 
-          <td class="max-w-[325px] w-[100px] overflow-hidden text-ellipsis whitespace-nowrap border-b" @click="editField('priority', task)">
-            <select
-              v-if="isEditing.priority && currentEditingTask === task.id"
-              v-model="task.priority"
-              @blur="saveEdit"
-              class="max-w-[90px] border border-gray-300 p-1"
+            <td
+              class="max-w-[300px] w-[120px] overflow-hidden text-ellipsis whitespace-nowrap border-b"
+              @click="editField('status', task)"
             >
-              <option value="Low">Low</option>
-              <option value="Medium">Medium</option>
-              <option value="High">High</option>
-            </select>
-            <span v-else>
-              <template v-if="task.priority === 'Medium' ">Medium</template>
-              <template v-else-if="task.priority === 'High' ">High</template>
-              <template v-else-if="task.priority=== 'Low'">Low</template>
-              <template v-else>Status desconhecido</template>
-            </span>
-          </td>
+              <select
+                v-if="isEditing.status && currentEditingTask === task.id"
+                v-model="task.status"
+                
+                class="max-w-[100px] border border-gray-300 p-1"
+              >
+                <option value="0">Pendente</option>
+                <option value="1">Em Progresso</option>
+                <option value="2">Concluído</option>
+              </select>
+              <span v-else>
+                <template v-if="task.status === 1">Em progresso</template>
+                <template v-else-if="task.status === 2">Concluído</template>
+                <template v-else-if="task.status === 0">Pendente</template>
+              </span>
+            </td>
 
-          <td class="max-w-[325px] w-[180px] overflow-hidden text-ellipsis whitespace-nowrap border-b" @click="editField('deadline', task)">
-  <input
-    v-if="isEditing.deadline && currentEditingTask === task.id"
-    v-model="task.deadline"
-    @blur="saveEdit"
-    type="datetime-local"
-    class="max-w-[175px] border border-gray-300 p-1"
-  />
-  <span v-else>
-  {{ task.deadline ? formatDate(task.deadline) : 'N/A' }}
-</span>
-</td>
-          <td class="py-2 px-4 border-b flex flex-row gap-3">
-            <button
-              v-if="task.id !== undefined"
-              @click="deleteTask(task.id)"
-              class="text-red-500 hover:text-red-700 ml-2"
+            <td
+              class="max-w-[325px] w-[100px] overflow-hidden text-ellipsis whitespace-nowrap border-b"
+              @click="editField('priority', task)"
             >
-              Excluir
-            </button>
-            <button
-      v-if="currentEditingTask !== null"
-      @click="saveEdit"
-      class="flex  justify-center items-center  font-bold shadow-lg"
-    >
-      <img src="../assets//edit-1479-svgrepo-com (2).svg"   class="w-[15px]" alt="">
-    </button>
-    <button
-      v-else :disabled="true"
-      
-      class="flex  justify-center items-center  font-bold shadow-lg"
-    >
-      <img src="../assets/edit-1479-svgrepo-com (3).svg"   class="w-[15px]" alt="">
-    </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+              <select
+                v-if="isEditing.priority && currentEditingTask === task.id"
+                v-model="task.priority"
+                
+                class="max-w-[90px] border border-gray-300 p-1"
+              >
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+              </select>
+              <span v-else>
+                <template v-if="task.priority === 'Medium'">Medium</template>
+                <template v-else-if="task.priority === 'High'">High</template>
+                <template v-else-if="task.priority === 'Low'">Low</template>
+                <template v-else>Status desconhecido</template>
+              </span>
+            </td>
+
+            <td
+              class="max-w-[325px] w-[180px] overflow-hidden text-ellipsis whitespace-nowrap border-b"
+              @click="editField('deadline', task)"
+            >
+              <input
+                v-if="isEditing.deadline && currentEditingTask === task.id"
+                v-model="task.deadline"
+              
+                type="datetime-local"
+                class="max-w-[175px] border border-gray-300 p-1"
+              />
+              <span v-else>
+                {{ task.deadline ? formatDate(task.deadline) : "N/A" }}
+              </span>
+            </td>
+            <td class="py-2 px-4 border-b flex flex-row gap-3">
+              <button
+                v-if="task.id !== undefined"
+                @click="deleteTask(task.id)"
+                class="text-red-500 hover:text-red-700 ml-2"
+              >
+                Excluir
+              </button>
+              <button
+                v-if="currentEditingTask !== null"
+                @click="saveEdit"
+                class="flex justify-center items-center font-bold shadow-lg"
+              >
+                <img
+                  src="../assets//edit-1479-svgrepo-com (2).svg"
+                  class="w-[15px]"
+                  alt=""
+                />
+              </button>
+              <button
+                v-else
+                :disabled="true"
+                class="flex justify-center items-center font-bold shadow-lg"
+              >
+                <img
+                  src="../assets/edit-1479-svgrepo-com (3).svg"
+                  class="w-[15px]"
+                  alt=""
+                />
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { useTaskStore } from "@/stores/taskStore"; 
+import { useTaskStore } from "@/stores/taskStore";
 import { ITask } from "@/interfaces/ITask";
 import { format } from "date-fns";
 import { useEmployeeStore } from "@/stores/employeeStore";
@@ -250,9 +300,8 @@ import { IEmployee } from "@/interfaces/IEmployee";
 
 const employeeStore = useEmployeeStore();
 
-
 const taskStore = useTaskStore();
-const tasks = ref<ITask[]>([]); 
+const tasks = ref<ITask[]>([]);
 const employees = ref<IEmployee[]>([]);
 
 const selectedOption = ref("");
@@ -270,7 +319,8 @@ const isEditing = ref({
   description: false,
   status: false,
   priority: false,
-  deadline: false
+  deadline: false,
+  employeeId: false,
 });
 
 const currentEditingTask = ref<number | null>(null);
@@ -278,7 +328,7 @@ const currentEditingTask = ref<number | null>(null);
 const fetchTasks = async () => {
   await taskStore.fetchAllTasks();
   tasks.value = taskStore.tasks;
-  filteredTasks.value = tasks.value; 
+  filteredTasks.value = tasks.value;
   console.log("Tarefas:", tasks.value);
 };
 
@@ -288,19 +338,15 @@ const fetchEmployees = async () => {
   console.log(employees.value);
 };
 
+const formatDate = (dateString: string): string | null => {
+  const date = new Date(dateString);
 
-
- 
-
-  const formatDate = (dateString: string): string | null => {
-    const date = new Date(dateString);
-    
-    if (isNaN(date.getTime())) {
-      console.error(`Invalid date value: ${dateString}`);
-      return null; 
-    }
-    return format(date, "dd-MM-yyyy HH:mm");
-  };
+  if (isNaN(date.getTime())) {
+    console.error(`Invalid date value: ${dateString}`);
+    return null;
+  }
+  return format(date, "dd-MM-yyyy HH:mm");
+};
 const filterTasks = () => {
   filteredTasks.value = tasks.value.filter((task) => {
     const matchesId = idInput.value
@@ -318,7 +364,6 @@ const filterTasks = () => {
       ? task.employee && task.employee.id === selectedOption.value
       : true;
 
-   
     const formattedDateInput = dateInput.value
       ? formatDate(dateInput.value)
       : null;
@@ -374,13 +419,11 @@ const createTask = async () => {
   const employeeId = Number(selectedEmployee.id);
   console.log("Valor de dateInput:", dateInput.value);
 
-  
   const dateValue = new Date(dateInput.value);
-
 
   if (isNaN(dateValue.getTime())) {
     console.error("Data inválida:", dateInput.value);
-    return; 
+    return;
   }
 
   const deadlineFormatted = dateValue.toISOString();
@@ -402,49 +445,63 @@ const createTask = async () => {
 const deleteTask = async (id: number) => {
   try {
     console.log("Excluindo tarefa com ID:", id);
-    await taskStore.deleteTaskStore(id); 
+    await taskStore.deleteTaskStore(id);
     fetchTasks();
-    clearFilters(); 
+    clearFilters();
   } catch (error) {
     console.error("Erro ao excluir a tarefa:", error);
   }
 };
 
-const editField = (field: 'title' | 'description' | 'status' | 'priority' | 'deadline', task: ITask) => {
+const editField = (
+  field:
+    | "title"
+    | "description"
+    | "status"
+    | "priority"
+    | "deadline"
+    | "employeeId",
+  task: ITask
+) => {
   if (task.id !== undefined) {
-    currentEditingTask.value = task.id; 
-    isEditing.value[field] = true; 
+    currentEditingTask.value = task.id;
+    isEditing.value[field] = true;
   }
 };
 
 const saveEdit = async () => {
   if (currentEditingTask.value !== null) {
     const taskId = currentEditingTask.value;
-    const taskToUpdate = tasks.value.find(task => task.id === taskId);
+    const taskToUpdate = tasks.value.find((task) => task.id === taskId);
 
     if (taskToUpdate) {
-     
-      if (taskToUpdate.deadline === undefined || taskToUpdate.deadline === null) {
-  console.error("Deadline está indefinido ou nulo:", taskToUpdate);
-} 
+      if (
+        taskToUpdate.deadline === undefined ||
+        taskToUpdate.deadline === null
+      ) {
+        console.error("Deadline está indefinido ou nulo:", taskToUpdate);
+      }
 
-      await taskStore.updateTaskStore(taskToUpdate); 
+      await taskStore.updateTaskStore(taskToUpdate);
       console.log(`Task ${taskId} updated successfully`);
     } else {
       console.error(`Task with ID ${taskId} not found`);
     }
 
-    
-    isEditing.value = { title: false, description: false, status: false, deadline: false, priority: false };
+    isEditing.value = {
+      title: false,
+      description: false,
+      status: false,
+      deadline: false,
+      priority: false,
+      employeeId: false,
+    };
     currentEditingTask.value = null;
     fetchTasks();
   } else {
     console.error("No current editing task");
   }
 };
-
-
-
 
 onMounted(() => {
   fetchTasks();
