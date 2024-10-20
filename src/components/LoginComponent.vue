@@ -97,24 +97,23 @@
 
       <div class="flex px-[100px]  flex-row gap-2 mb-2 ">
         <label class="flex items-center cursor-pointer">
-          <input
-            type="radio"
-            v-model="selectedOption"
-            value="1"
-            class="form-radio h-4 w-4 text-blue-600"
-          />
-          <span class="ml-2 text-gray-700">Employee</span>
-        </label>
+      <input
+        type="radio"
+        @click="updateSelectedOption(1)"
+        class="form-radio h-4 w-4 text-blue-600"
+      />
+      <span class="ml-2 text-gray-700">Employee</span>
+    </label>
 
-        <label class="flex items-center cursor-pointer">
-          <input
-            type="radio"
-            v-model="selectedOption"
-            value="0"
-            class="form-radio h-4 w-4 text-blue-600"
-          />
-          <span class="ml-2 text-gray-700">Manager</span>
-        </label>
+    <label class="flex items-center cursor-pointer">
+      <input
+        type="radio"
+      
+        @click="updateSelectedOption(0)"
+        class="form-radio h-4 w-4 text-blue-600"
+      />
+      <span class="ml-2 text-gray-700">Manager</span>
+    </label>
       </div>
 
       <button
@@ -155,7 +154,12 @@ export default {
     const errorMessage = ref<string | null>(null); 
 
     const selectedOption = ref<number>(0);
-    const showSignUp = ref(false);
+    const showSignUp = ref(false);  
+
+    const updateSelectedOption = (value: number) => {
+  selectedOption.value = value;
+  employee.value.role = value; // Atualiza o role no objeto employee
+};
     
     const employee = ref<IEmployee>({
       
@@ -223,7 +227,8 @@ export default {
       fname,
       lname,
       handleRegister,
-      employee
+      employee,
+      updateSelectedOption
     };
   },
 };

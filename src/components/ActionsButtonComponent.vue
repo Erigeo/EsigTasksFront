@@ -141,7 +141,7 @@
               <input
                 v-if="isEditing.title && currentEditingTask === task.id"
                 v-model="task.title"
-                
+                @blur="saveEdit"
                 class="max-w-[110px] border border-gray-300 p-1"
               />
               <span v-else>{{ task.title }}</span>
@@ -155,7 +155,7 @@
               <input
                 v-if="isEditing.description && currentEditingTask === task.id"
                 v-model="task.description"
-                
+                @blur="saveEdit"
                 class="max-w-[100px] border border-gray-300 p-1"
               />
               <span v-else>{{ task.description }}</span>
@@ -168,6 +168,7 @@
               <select
                 v-if="isEditing.employeeId && currentEditingTask === task.id"
                 v-model="task.employeeId"
+                @blur="saveEdit"
                 class="max-w-[90px] border border-gray-300 p-1"
               >
                 <!-- Supondo que `task.employees` é uma lista de objetos de funcionários -->
@@ -201,7 +202,7 @@
               <select
                 v-if="isEditing.status && currentEditingTask === task.id"
                 v-model="task.status"
-                
+                @blur="saveEdit"
                 class="max-w-[100px] border border-gray-300 p-1"
               >
                 <option value="0">Pendente</option>
@@ -222,7 +223,7 @@
               <select
                 v-if="isEditing.priority && currentEditingTask === task.id"
                 v-model="task.priority"
-                
+                @blur="saveEdit"
                 class="max-w-[90px] border border-gray-300 p-1"
               >
                 <option value="Low">Low</option>
@@ -244,7 +245,7 @@
               <input
                 v-if="isEditing.deadline && currentEditingTask === task.id"
                 v-model="task.deadline"
-              
+                @blur="saveEdit"
                 type="datetime-local"
                 class="max-w-[175px] border border-gray-300 p-1"
               />
@@ -481,7 +482,8 @@ const saveEdit = async () => {
       ) {
         console.error("Deadline está indefinido ou nulo:", taskToUpdate);
       }
-
+      taskToUpdate.status = Number(taskToUpdate.status);
+      
       await taskStore.updateTaskStore(taskToUpdate);
       console.log(`Task ${taskId} updated successfully`);
     } else {
