@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-center">
     <div
-      class="flex w-[950px] h-[300px] flex-row justify-center items-center mt-[50px] bg-gray-200 rounded-xl shadow-md"
+      class="flex w-[950px] h-[350px] flex-row justify-center items-center mt-[50px] bg-gray-200 rounded-xl shadow-md"
     >
       <img src="../assets/teste 1.svg" class="w-[300px] h-[200px]" />
       <form >
@@ -23,6 +23,24 @@
           </div>
         </div>
 
+        <div class="flex flex-row">
+          <div class="flex-col flex m-5">
+            <label  class="flex items-start">Date</label>
+            <input placeholder="dd-mm-aaaa hh:mm"
+              v-model="dateInput"
+              class="border-b-[1px] border-black bg-transparent outline-none"
+            />
+          </div>
+          <div class="flex-col flex m-5 w-[300px]">
+            <label class="flex items-start">Description</label>
+            <input
+              v-model="descriptionInput"
+              
+              class="border-b-[1px] border-black bg-transparent outline-none"
+            />
+          </div>
+        </div>
+
         <div class="flex flex-row gap-8">
           <div class="flex-col flex m-5">
             <label class="flex items-start">Progress</label>
@@ -31,9 +49,22 @@
               class="border-b-[1px] border-black bg-transparent outline-none"
             >
               
-              <option value="option1">Pendente</option>
-              <option value="option2">Em Progresso</option>
-              <option value="option3">Concluido</option>
+              <option value="0">Pendente</option>
+              <option value="1">Em Progresso</option>
+              <option value="2">Concluido</option>
+            </select>
+          </div>
+
+          <div class="flex-col flex m-5">
+            <label class="flex items-start">Priority</label>
+            <select
+              v-model="selectedPriority"
+              class="border-b-[1px] border-black bg-transparent outline-none"
+            >
+              
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
             </select>
           </div>
 
@@ -54,85 +85,34 @@
           </div>
         </div>
 
-        <div class="flex flex-row gap-5">
+        <div class="flex justify-center flex-row gap-7">
           <button
             @click="filterTasks"
-            class="flex w-[200px] justify-center items-center h-[40px] bg-blue-400 rounded-md font-bold text-white shadow-lg"
+            class="flex w-[150px] justify-center items-center h-[40px] bg-blue-400 rounded-md font-bold text-white shadow-lg"
           >
             Buscar
           </button>
 
           <button
             @click="createTask"
-            class="flex w-[200px] justify-center items-center h-[40px] bg-green-500 rounded-md font-bold text-white shadow-lg"
+            class="flex w-[150px] justify-center items-center h-[40px] bg-green-500 rounded-md font-bold text-white shadow-lg"
           >
             Create Task
           </button>
+
+          <button
+            @click="clearFilters"
+            class="flex w-[150px] justify-center items-center h-[40px] bg-gray-400 rounded-md font-bold text-white shadow-lg"
+          >
+            Clean filters
+          </button>
+
+          
         </div>
       </form>
     </div>
   </div>
 
-  <div class="overflow-x-auto justify-center flex items-center mt-[50px]">
-    <table class="bg-white border border-gray-300">
-      <thead>
-        <tr class="bg-gray-200 text-gray-700">
-          <th class="py-2 px-4 border-b">ID</th>
-          <th class="py-2 px-4 border-b">Título</th>
-          <!-- Mudando para exibir título -->
-          <th class="py-2 px-4 border-b">Descrição</th>
-          <!-- Adicionando descrição -->
-          <th class="py-2 px-4 border-b">Responsável</th>
-          <th class="py-2 px-4 border-b">Status</th>
-          <!-- Adicionando status -->
-          <th class="py-2 px-4 border-b">Deadline</th>
-          <th class="py-2 px-4 border-b">Ação</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="task in tasks" :key="task.id" class="hover:bg-gray-100">
-          <td class="py-2 px-4 border-b">{{ task.id }}</td>
-          <td class="py-2 px-4 border-b">{{ task.title }}</td>
-          <!-- Alterando para exibir título -->
-
-          <td class="py-2 px-4 border-b">{{ task.description }}</td>
-          <td class="py-2 px-4 border-b">
-            {{ task.employee ? task.employee.firstName : "N/A" }}
-          </td>
-          <!-- Alterando para exibir descrição -->
-          <td class="py-2 px-4 border-b">
-            <template v-if="task.status === 1"> Em progresso </template>
-            <template v-else-if="task.status === 2"> Concluído </template>
-            <template v-else-if="task.status === 0"> Pendente </template>
-            <template v-else> Status desconhecido </template>
-          </td>
-          <!-- Alterando para exibir status -->
-          <td class="py-2 px-4 border-b">{{ formatDate(task.deadline) }}</td>
-          <td class="py-2 px-4 border-b">
-            <button
-              @click="editTask(task.id)"
-              class="text-gay-500 hover:text-blue-700"
-            >
-              Editar
-            </button>
-            <button
-              @click="deleteTask(task.id)"
-              class="text-red-500 hover:text-red-700 ml-2"
-            >
-              Excluir
-            </button>
-
-            <button
-              @click="exibirTask(task.id)"
-              class="text-blue-500 hover:text-green-700 ml-2"
-            >
-              Exibir
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
 
 
 
@@ -189,16 +169,21 @@ const taskStore = useTaskStore();
 const tasks = ref<ITask[]>([]); // Estado para as tarefas
 const employees = ref<IEmployee[]>([]);
 
-const selectedOption = ref(null);
+const selectedOption = ref("");
 const selectedProgress = ref("");
 const titleInput = ref("");
 const idInput = ref("");
+const dateInput = ref("");
+const descriptionInput = ref("");
+const selectedPriority= ref("");
+
 
 const filteredTasks = ref<ITask[]>([]);
 
 const fetchTasks = async () => {
-  await taskStore.fetchAllTasks(); // Chamando a função para buscar todas as tarefas
-  tasks.value = taskStore.tasks; // Atualizando o estado com as tarefas do store
+  await taskStore.fetchAllTasks(); 
+  tasks.value = taskStore.tasks;
+  filteredTasks.value = tasks.value; // Adicione esta linha
   console.log("Tarefas:", tasks.value);
 };
 
@@ -208,26 +193,50 @@ const fetchEmployees = async () => {
   console.log(employees.value);
 };
 
-const formatDate = (dateString: string) => {
+const formatDate = (dateString: string): string | null => {
   const date = new Date(dateString);
+  // Verifica se a data é válida
+  if (isNaN(date.getTime())) {
+    console.error(`Invalid date value: ${dateString}`);
+    return null; // Retorna null para valores de data inválidos
+  }
   return format(date, "dd-MM-yyyy HH:mm");
 };
-
 const filterTasks = () => {
   filteredTasks.value = tasks.value.filter((task) => {
     const matchesId = idInput.value ? task.id.toString() === idInput.value : true;
     const matchesTitle = titleInput.value ? task.title.includes(titleInput.value) : true;
     const matchesProgress = selectedProgress.value
-      ? (selectedProgress.value === "option1" && task.status === 0) ||
-        (selectedProgress.value === "option2" && task.status === 1) ||
-        (selectedProgress.value === "option3" && task.status === 2)
+      ? (selectedProgress.value === "0" && task.status === 0) ||
+        (selectedProgress.value === "1" && task.status === 1) ||
+        (selectedProgress.value === "2" && task.status === 2)
       : true;
     const matchesEmployee = selectedOption.value
       ? task.employee && task.employee.id === selectedOption.value
       : true;
 
-    return matchesId && matchesTitle && matchesProgress && matchesEmployee;
+    // Filtragem de data com verificação de formato
+    const formattedDateInput = dateInput.value ? formatDate(dateInput.value) : null;
+    const formattedTaskDeadline = task.deadline ? formatDate(task.deadline) : null;
+    const matchesDate = formattedDateInput ? formattedTaskDeadline === formattedDateInput : true;
+
+    const matchesDescription = descriptionInput.value ? task.description.includes(descriptionInput.value) : true;
+    const matchesPriority = selectedPriority.value ? task.priority === selectedPriority.value : true;
+
+    return matchesId && matchesTitle && matchesProgress && matchesEmployee && matchesDate && matchesDescription && matchesPriority;
   });
+};
+
+const clearFilters = () => {
+  // Limpa os valores dos campos de entrada
+  idInput.value = "";
+  titleInput.value = "";
+  selectedProgress.value = "";
+  selectedOption.value = "";
+  dateInput.value = "";
+  descriptionInput.value = "";
+  selectedPriority.value = "";
+  
 };
 
 const createTask = () => {
@@ -253,5 +262,7 @@ const exibirTask = (id: number) => {
 onMounted(() => {
   fetchTasks();
   fetchEmployees();
+  
+
 });
 </script>
