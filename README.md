@@ -7,7 +7,8 @@ Para uso completo não esqueça de acessar a Api disponível em [EsigTaskApi](ht
 
 #Imagens
 ![Logo do Projeto](./src/assets/image.png)
-![Logo do Projeto](./assets/image copy.png)
+![Logo do Projeto](./src/assets/image2.png)
+![Logo do Projeto](./src/assets/image3.png)
 
 ## Descrição
 Este projeto é um frontend desenvolvido em **Vue.js** e estilizado com **Tailwind CSS**. Ele foi criado com base no que foi proposto na tarefa de estágio fullstack da Esig Group. O projeto permite que os usuários manipulem a interface desenvolvida para interagir com a API. Assim, sendo possível criar conta, ser autenticado, e realizar CRUD de Tasks.
