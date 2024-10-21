@@ -7,8 +7,7 @@ Para uso completo não esqueça de acessar a Api disponível em [EsigTaskApi](ht
 
 #Imagens
 <img src="./src/assets/image.png" alt="Screenshot do Projeto" width="400">
-<img src="./src/assets/image2.png" alt="Screenshot do Projeto" width="400">
-<img src="./src/assets/image3.png" alt="Screenshot do Projeto" width="400">
+<img src="./src/assets/image2.png" alt="Screenshot do Projeto" width="700">
 
 
 ## Descrição
