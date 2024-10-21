@@ -6,7 +6,7 @@
 Para uso completo não esqueça de acessar a Api disponível em [EsigTaskApi](https://github.com/Erigeo/EsigTarefaGerenciador) e seguir os passos descritos.
 
 #Imagens
-![Logo do Projeto](./assets/image.png)
+![Logo do Projeto](./src/assets/image.png)
 ![Logo do Projeto](./assets/image copy.png)
 
 ## Descrição
