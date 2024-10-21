@@ -400,7 +400,8 @@ const clearFilters = () => {
   selectedPriority.value = "";
 };
 
-const createTask = async () => {
+const createTask = async (event: { preventDefault: () => void; }) => {
+  event.preventDefault();
   console.log("Criar nova tarefa");
 
   const selectedEmployee = employees.value.find(
