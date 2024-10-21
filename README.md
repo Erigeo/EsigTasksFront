@@ -5,6 +5,10 @@
 # AVISO
 Para uso completo não esqueça de acessar a Api disponível em [EsigTaskApi](https://github.com/Erigeo/EsigTarefaGerenciador) e seguir os passos descritos.
 
+#Imagens
+![Logo do Projeto](./assets/image.png)
+![Logo do Projeto](./assets/image copy.png)
+
 ## Descrição
 Este projeto é um frontend desenvolvido em **Vue.js** e estilizado com **Tailwind CSS**. Ele foi criado com base no que foi proposto na tarefa de estágio fullstack da Esig Group. O projeto permite que os usuários manipulem a interface desenvolvida para interagir com a API. Assim, sendo possível criar conta, ser autenticado, e realizar CRUD de Tasks.
 
