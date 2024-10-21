@@ -6,7 +6,7 @@
 Para uso completo não esqueça de acessar a Api disponível em [EsigTaskApi](https://github.com/Erigeo/EsigTarefaGerenciador) e seguir os passos descritos.
 
 #Imagens
-<img src="./src/assets/image.png" alt="Screenshot do Projeto" width="400">
+
 <img src="./src/assets/image2.png" alt="Screenshot do Projeto" width="700">
 
 
