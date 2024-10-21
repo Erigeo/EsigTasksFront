@@ -173,9 +173,7 @@
               >
                 <!-- Supondo que `task.employees` é uma lista de objetos de funcionários -->
                 <option :value="task.employeeId">
-                  {{
-                    task.employee?.firstName 
-                  }}
+                  {{ task.employee?.firstName }}
                 </option>
 
                 <option
@@ -187,11 +185,9 @@
                 </option>
               </select>
 
-              <template   v-else>
-                  {{ task.employee?.firstName }}
-                </template>
-                
-              
+              <template v-else>
+                {{ task.employee?.firstName }}
+              </template>
             </td>
 
             <td
@@ -347,7 +343,8 @@ const formatDate = (dateString: string): string | null => {
   }
   return format(date, "dd-MM-yyyy HH:mm");
 };
-const filterTasks = () => {
+const filterTasks = (event: { preventDefault: () => void }) => {
+  event.preventDefault();
   filteredTasks.value = tasks.value.filter((task) => {
     const matchesId = idInput.value
       ? task.id?.toString() === idInput.value
@@ -485,10 +482,10 @@ const saveEdit = async () => {
         taskToUpdate.employeeId === undefined ||
         taskToUpdate.employeeId === null
       ) {
-        console.error("Employee ID está indefinido ou nulo:", taskToUpdate)
+        console.error("Employee ID está indefinido ou nulo:", taskToUpdate);
       }
       taskToUpdate.status = Number(taskToUpdate.status);
-      
+
       await taskStore.updateTaskStore(taskToUpdate);
       console.log(`Task ${taskId} updated successfully`);
     } else {
